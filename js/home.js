@@ -1,3 +1,37 @@
+async function updatePrompt(){
+  const promptContainer = document.getElementById('prompt-text');
+  promptContainer.innerHTML = "Loading...";
+
+  try {
+    const prompt = await fetchArtPrompt();
+    promptContainer.innerText = prompt;
+  }
+  catch(error){
+    console.error("Display Error: ", error)
+    promptContainer.innerText = "Failed to load prompt."
+  }
+  const now = new Date();
+  
+  // Get current time and calculate next update time (midnight)
+  const tomorrow = new Date(now);
+  tomorrow.setHours(24, 0, 0, 0);
+  
+  // Calculate time remaining
+  const timeRemaining = tomorrow - now;
+  
+  
+  // Update countdown
+  const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+  const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+  document.getElementById('countdown').textContent = 
+      `Time until next challenge: ${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}`;
+}
+
+// Update every minute
+setInterval(updatePrompt, 60000);
+// Initial update
+updatePrompt();
+
 const submissions = [
   {
       title: 'Drawing 1',

@@ -1,5 +1,15 @@
-function updatePrompt(){
-    let prompts = ['dream car','dream house', 'your own animal','surreal dream'];
+async function updatePrompt(){
+    const promptContainer = document.getElementById('prompt-text');
+    promptContainer.innerHTML = "Loading...";
+
+    try {
+      const prompt = await fetchArtPrompt();
+      promptContainer.innerText = prompt;
+    }
+    catch(error){
+      console.error("Display Error: ", error)
+      promptContainer.innerText = "Failed to load prompt."
+    }
     const now = new Date();
     
     // Get current time and calculate next update time (midnight)
@@ -9,9 +19,6 @@ function updatePrompt(){
     // Calculate time remaining
     const timeRemaining = tomorrow - now;
     
-    // Update prompt based on day
-    const dayIndex = Math.floor(now / (1000 * 60 * 60 * 24)) % prompts.length;
-    document.getElementById('prompt-text').textContent = prompts[dayIndex];
     
     // Update countdown
     const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
